@@ -1,0 +1,285 @@
+mission:
+  id: EUL-PAYMESH-AFRICA-24H-001
+  name: EULYONIS PayMesh Africa 24-Hour Mission
+  owner: Dr Erick Franck PATHINVO
+  classification: confidential-proprietary
+  timebox_hours: 24
+  priority: critical
+  objective: >-
+    Produce a decision-grade demonstrable prototype and complete execution
+    report for a rail-agnostic pan-African financial interoperability and
+    inclusion platform serving micro-merchants, SMEs, cooperatives, tontines,
+    institutions, governments and the diaspora.
+  launch_position:
+    custody_of_funds: false
+    direct_lending: false
+    live_payment_connections: false
+    regulated_partner_model: true
+    prototype_only: true
+
+principles:
+  - connect_existing_rails
+  - merchant_first
+  - offline_first
+  - multilingual_and_low_literacy
+  - consent_and_privacy_by_design
+  - explainable_ai
+  - human_authorization_for_payment
+  - evidence_before_claims
+  - country_pack_localization
+
+benchmark_targets:
+  - BCEAO_PI_SPI
+  - PAPSS
+  - Liberia_IIPS_Mojaloop
+  - UPI
+  - Pix_Open_Finance_Brazil
+  - GhIPSS
+  - PesaLink
+  - MauCAS
+  - TIPS_Tanzania
+  - eKash_Rwanda
+  - PayShap
+  - TerraPay
+  - Thunes
+  - AfricaNenda_SIIPS
+
+prototype_journeys:
+  - merchant_guided_onboarding
+  - tiered_kyc_and_consent
+  - receive_by_qr_or_alias
+  - unified_cash_wallet_bank_ledger
+  - expense_and_daily_profit
+  - offline_capture_and_sync
+  - cross_border_quote_fee_fx_route_eta
+  - purpose_bound_diaspora_payment
+  - tontine_vsla_contribution_ledger
+  - dispute_refund_beneficiary_verification
+  - financial_health_bankability_dashboard
+  - institutional_impact_dashboard
+
+technical_scope:
+  frontend: mobile_first_pwa
+  runtime: docker_compose
+  services:
+    - api_gateway
+    - identity_and_tenant
+    - payment_orchestration
+    - ledger_and_reconciliation
+    - merchant
+    - tontine_community_finance
+    - consent_and_audit
+    - risk_and_fraud_rules
+    - notification_abstraction
+  mock_adapters:
+    - PI_SPI
+    - PAPSS
+    - Mojaloop_IIPS
+    - mobile_money
+    - bank_rail
+  storage:
+    server: PostgreSQL
+    offline: IndexedDB_or_SQLite
+  specifications:
+    - OpenAPI
+    - event_catalogue
+    - transaction_state_machine
+  tests:
+    - smoke
+    - functional
+    - reconciliation
+    - accessibility
+    - low_bandwidth
+    - security_review
+
+business_model:
+  name: Open Interoperability Core plus Commercial Inclusive Services
+  revenue_streams:
+    - free_lite_merchant_tier
+    - merchant_sme_saas
+    - api_and_orchestration_usage
+    - managed_white_label_licensing
+    - country_pack_fees
+    - connector_marketplace_revenue_share
+    - institutional_inclusion_programmes
+    - capped_transparent_orchestration_fee_where_permitted
+    - licensed_partner_referral_revenue
+    - privacy_preserving_impact_intelligence
+    - training_implementation_certification
+  constraint: do_not_depend_only_on_transaction_take_rate
+
+innovations:
+  - economic_passport
+  - smart_route_economics
+  - purpose_bound_diaspora_payments
+  - merchant_to_bankability_ladder
+  - tontine_trust
+  - offline_trust_ledger
+  - humanease_finance
+  - explainable_financial_twin
+  - country_pack_factory
+  - policy_controlled_agent_commerce
+
+teams:
+  command_cell:
+    - mission_orchestrator
+    - product_transformation_architect
+    - pmo_controller
+    - independent_qa_audit_lead
+  benchmark_strategy:
+    - economic_intelligence_agent
+    - financial_inclusion_research_agent
+    - competitive_benchmark_agent
+    - partnership_strategy_agent
+  product_inclusion:
+    - product_manager
+    - inclusive_ux_lead
+    - merchant_operations_specialist
+    - tontine_cooperative_finance_specialist
+    - localization_accessibility_agent
+  architecture_interoperability:
+    - chief_solution_architect
+    - payment_systems_architect
+    - api_platform_engineer
+    - data_ledger_architect
+    - offline_edge_engineer
+  application_engineering:
+    - rapid_prototyper
+    - frontend_pwa_engineers
+    - backend_engineers
+    - database_engineer
+    - devops_automator
+  ai_data:
+    - ai_product_architect
+    - explainable_scoring_engineer
+    - fraud_analytics_engineer
+    - bi_data_analyst
+    - model_risk_reviewer
+  security_legal_compliance:
+    - devsecops_architect
+    - cybersecurity_tester
+    - privacy_engineer
+    - aml_cft_specialist
+    - fintech_regulatory_analyst
+    - legal_ip_reviewer
+  commercialization:
+    - business_model_architect
+    - finance_analyst
+    - pricing_unit_economics_analyst
+    - gtm_strategist
+    - institutional_partnerships_agent
+  documentation_assurance:
+    - technical_writer
+    - executive_report_writer
+    - documentation_controller
+    - test_evidence_auditor
+
+schedule:
+  - hours: "0-1"
+    gate: mission_lock
+    outputs:
+      - frozen_scope
+      - owners
+      - definition_of_done
+      - decision_log
+  - hours: "1-4"
+    gate: parallel_discovery
+    outputs:
+      - benchmark
+      - regulatory_perimeter
+      - user_journeys
+      - architecture_baseline
+      - data_model
+      - commercial_hypotheses
+  - hours: "4-6"
+    gate: design_approval
+    outputs:
+      - approved_prd
+      - approved_architecture
+      - approved_mock_contracts
+      - reduced_scope
+  - hours: "6-16"
+    gate: parallel_build
+    outputs:
+      - prototype
+      - api
+      - ledger
+      - dashboards
+      - offline_simulation
+      - business_model
+      - compliance_risk_pack
+  - hours: "16-19"
+    gate: integration
+    outputs:
+      - integrated_journeys
+      - seeded_demo
+      - critical_defect_resolution
+  - hours: "19-22"
+    gate: assurance
+    outputs:
+      - functional_results
+      - security_review
+      - accessibility_results
+      - low_bandwidth_results
+      - reconciliation_results
+  - hours: "22-24"
+    gate: executive_closeout
+    outputs:
+      - final_demo
+      - acceptance_score
+      - evidence_pack
+      - executive_report
+      - 30_90_180_day_backlog
+
+acceptance:
+  minimum_complete_journeys: 10
+  required:
+    - runnable_local_prototype
+    - startup_guide
+    - openapi_contracts
+    - mock_adapters
+    - ledger_reconciliation_evidence
+    - offline_capture_demo
+    - benchmark_matrix
+    - conservative_financial_scenarios
+    - legal_perimeter
+    - regulated_partner_model
+    - threat_model
+    - risk_register
+    - architecture_diagrams
+    - multilingual_accessibility_approach
+    - final_executive_report
+    - explicit_simulated_assumed_pending_register
+
+controls:
+  prohibited:
+    - claim_production_readiness
+    - claim_regulatory_approval
+    - connect_live_payment_systems
+    - use_real_funds
+    - store_real_personal_financial_data
+    - invent_api_access_or_partnerships
+    - opaque_autonomous_credit_decisions
+    - autonomous_agent_payment_execution
+  mandatory:
+    - explicit_human_payment_authorization
+    - full_audit_trail
+    - evidence_index
+    - limitations_disclosure
+    - proprietary_asset_preservation
+
+final_report_sections:
+  - executive_conclusion_and_go_no_go
+  - built_and_demonstrated
+  - benchmark_findings
+  - innovation_findings_and_rejections
+  - product_and_ux_results
+  - architecture_and_interoperability_results
+  - security_privacy_compliance_regulatory_results
+  - business_model_and_financial_scenarios
+  - tests_and_defects
+  - evidence_index
+  - risks_and_dependencies
+  - roadmap_30_90_180_days
+  - partner_and_regulator_plan
+  - completed_simulated_assumed_pending_matrix
