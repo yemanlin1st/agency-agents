@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <title>EULYONIS Trust Core</title>
+  <style>
+    :root { font-family: Arial, sans-serif; background:#f4f4f4; color:#111; }
+    * { box-sizing:border-box; }
+    body { margin:0; }
+    header { background:#111; color:#fff; padding:18px; }
+    header strong { color:#ff7900; }
+    main { max-width:760px; margin:auto; padding:16px; }
+    .card { background:#fff; border-radius:14px; padding:18px; margin:14px 0; box-shadow:0 3px 16px rgba(0,0,0,.08); }
+    label { display:block; font-weight:700; margin-top:12px; }
+    input, select, button { width:100%; padding:13px; margin-top:6px; border-radius:8px; border:1px solid #bbb; font-size:16px; }
+    button { background:#ff7900; border:none; color:#111; font-weight:800; cursor:pointer; }
+    button.secondary { background:#222; color:#fff; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    .state { font-size:24px; font-weight:800; color:#ff7900; }
+    .flow { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; font-size:11px; text-align:center; }
+    .flow span { padding:8px 3px; background:#eee; border-radius:7px; }
+    pre { overflow:auto; white-space:pre-wrap; background:#111; color:#d9ffd9; padding:12px; border-radius:8px; min-height:90px; }
+    small { color:#555; }
+  </style>
+</head>
+<body>
+<header>
+  <strong>EULYONIS</strong> Trust Core — Prototype sécurisé
+</header>
+<main>
+  <section class="card">
+    <h1>Transaction simulée et réconciliée</h1>
+    <p>Cette démonstration n'utilise aucun fonds réel et ne se connecte à aucun système de paiement en production.</p>
+    <div class="flow">
+      <span>Créer</span><span>Autoriser</span><span>Soumettre</span><span>Régler</span><span>Réconcilier</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <label>Montant</label>
+    <input id="amount" type="number" min="0.01" step="0.01" value="125.00">
+    <label>Devise</label>
+    <select id="currency"><option>LRD</option><option>USD</option><option>XOF</option><option>EUR</option></select>
+    <label>Payeur</label>
+    <input id="payer" value="merchant-001">
+    <label>Bénéficiaire</label>
+    <input id="beneficiary" value="social-fund-001">
+    <label>Objet</label>
+    <select id="purpose"><option value="SOCIAL_CONTRIBUTION">Cotisation sociale</option><option value="TONTINE_CONTRIBUTION">Cotisation tontine</option><option value="MERCHANT_PAYMENT">Paiement marchand</option></select>
+    <button id="run">Exécuter le flux complet</button>
+  </section>
+
+  <section class="card">
+    <div>État actuel</div>
+    <div id="state" class="state">NON DÉMARRÉ</div>
+    <small id="txid"></small>
+    <pre id="log">Prêt.</pre>
+  </section>
+</main>
+<script>
+const api = '/api';
+const log = document.getElementById('log');
+const state = document.getElementById('state');
+const txid = document.getElementById('txid');
+const button = document.getElementById('run');
+
+function add(message, data) {
+  log.textContent += `\n${message}${data ? '\n' + JSON.stringify(data, null, 2) : ''}`;
+}
+async function call(path, options = {}) {
+  const response = await fetch(api + path, {
+    ...options,
+    headers: {'Content-Type':'application/json', 'X-Tenant-ID':'pilot-lr', 'X-Actor-ID':'demo-user', ...(options.headers || {})}
+  });
+  const body = await response.json();
+  if (!response.ok) throw new Error(body.detail || 'Erreur API');
+  return body;
+}
+
+button.addEventListener('click', async () => {
+  button.disabled = true;
+  log.textContent = 'Démarrage du flux...';
+  try {
+    const amount = document.getElementById('amount').value;
+    const currency = document.getElementById('currency').value;
+    const railReference = 'MOCK-' + Date.now();
+    let tx = await call('/v1/transactions', {
+      method:'POST',
+      headers:{'Idempotency-Key':crypto.randomUUID()},
+      body:JSON.stringify({
+        amount,
+        currency,
+        payer_ref:document.getElementById('payer').value,
+        beneficiary_ref:document.getElementById('beneficiary').value,
+        purpose:document.getElementById('purpose').value
+      })
+    });
+    state.textContent = tx.state; txid.textContent = tx.id; add('Transaction créée', tx);
+
+    tx = await call(`/v1/transactions/${tx.id}/authorize`, {method:'POST'});
+    state.textContent = tx.state; add('Autorisation explicite enregistrée', tx);
+
+    tx = await call(`/v1/transactions/${tx.id}/submit`, {method:'POST', body:JSON.stringify({rail_reference:railReference})});
+    state.textContent = tx.state; add('Soumission simulée', tx);
+
+    tx = await call(`/v1/transactions/${tx.id}/settle`, {method:'POST', body:JSON.stringify({evidence_uri:`evidence://demo/${railReference}`})});
+    state.textContent = tx.state; add('Règlement simulé confirmé', tx);
+
+    const result = await call(`/v1/transactions/${tx.id}/reconcile`, {method:'POST', body:JSON.stringify({rail_reference:railReference, amount, currency})});
+    state.textContent = result.state; add('Réconciliation terminée', result);
+
+    const audit = await call(`/v1/transactions/${tx.id}/audit`);
+    add('Piste d’audit', audit);
+  } catch (error) {
+    state.textContent = 'ERREUR';
+    add('Échec', {message:error.message});
+  } finally {
+    button.disabled = false;
+  }
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+</script>
+</body>
+</html>
