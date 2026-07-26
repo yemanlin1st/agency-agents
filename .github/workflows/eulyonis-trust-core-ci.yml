@@ -1,0 +1,37 @@
+name: EULYONIS Trust Core CI
+
+on:
+  pull_request:
+    paths:
+      - "prototype/eulyonis-trust-core/**"
+      - ".github/workflows/eulyonis-trust-core-ci.yml"
+  push:
+    branches:
+      - "mission/eulyonis-paymesh-africa-24h"
+    paths:
+      - "prototype/eulyonis-trust-core/**"
+      - ".github/workflows/eulyonis-trust-core-ci.yml"
+
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: prototype/eulyonis-trust-core/backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: prototype/eulyonis-trust-core/backend/requirements.txt
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -r requirements.txt
+      - run: pytest -q
+      - run: python -m py_compile main.py
+
+  validate-compose:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose -f prototype/eulyonis-trust-core/docker-compose.yml config
