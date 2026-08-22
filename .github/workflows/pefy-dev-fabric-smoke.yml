@@ -1,0 +1,88 @@
+name: PEFY Dev Fabric Smoke
+
+on:
+  pull_request:
+    paths:
+      - 'AGENTS.md'
+      - 'config/pefy-agentic-routing.yaml'
+      - 'engineering/engineering-pefy-agentic-dev-orchestrator.md'
+      - 'scripts/install-pefy-dev-fabric.sh'
+      - 'docs/PEFY_AGENTIC_DEV_FABRIC.md'
+      - 'docs/PEFY_ACCOUNT_AGENTIC_ALIGNMENT.md'
+      - '.github/workflows/pefy-dev-fabric-smoke.yml'
+  push:
+    branches:
+      - 'pefy/21st-agentic-dev-fabric'
+    paths:
+      - 'AGENTS.md'
+      - 'config/pefy-agentic-routing.yaml'
+      - 'engineering/engineering-pefy-agentic-dev-orchestrator.md'
+      - 'scripts/install-pefy-dev-fabric.sh'
+      - 'docs/PEFY_AGENTIC_DEV_FABRIC.md'
+      - 'docs/PEFY_ACCOUNT_AGENTIC_ALIGNMENT.md'
+      - '.github/workflows/pefy-dev-fabric-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate bootstrap shell syntax
+        run: bash -n scripts/install-pefy-dev-fabric.sh
+
+      - name: Validate required orchestrator frontmatter
+        shell: bash
+        run: |
+          set -euo pipefail
+          file='engineering/engineering-pefy-agentic-dev-orchestrator.md'
+          grep -q '^name: PEFY Agentic Dev Orchestrator$' "$file"
+          grep -q '^description:' "$file"
+          grep -q '^color:' "$file"
+          grep -q '^emoji:' "$file"
+          grep -q '^vibe:' "$file"
+
+      - name: Validate PEFY sovereign hierarchy
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s AGENTS.md
+          test -s config/pefy-agentic-routing.yaml
+          test -s docs/PEFY_ACCOUNT_AGENTIC_ALIGNMENT.md
+          grep -q 'PEA' AGENTS.md
+          grep -q 'MƐTAPEFYON Ω' AGENTS.md
+          grep -q 'OMNIA Skillspector' AGENTS.md
+          grep -q 'AAOS-X' AGENTS.md
+          grep -q '^  sovereign_orchestrator: PEA$' config/pefy-agentic-routing.yaml
+          grep -q 'intelligence_fabric: "MƐTAPEFYON Ω™"' config/pefy-agentic-routing.yaml
+          grep -q 'class: external_ui_accelerator' config/pefy-agentic-routing.yaml
+          grep -q 'owner: PEFY-TECH' config/pefy-agentic-routing.yaml
+          grep -q 'assurance_extension: PEFY-CYBER' config/pefy-agentic-routing.yaml
+
+      - name: Validate 21st remains subordinate capability
+        shell: bash
+        run: |
+          set -euo pipefail
+          grep -q '21st.dev is an \*\*external UI acceleration capability\*\*' engineering/engineering-pefy-agentic-dev-orchestrator.md
+          grep -q 'External providers such as 21st.dev are capabilities, not governance authorities.' AGENTS.md
+
+      - name: Prevent committed 21st secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -nE 'API_KEY_21ST[[:space:]]*=[[:space:]]*"?[A-Za-z0-9_-]{12,}' -- . ':!docs/PEFY_AGENTIC_DEV_FABRIC.md'; then
+            echo 'Potential 21st.dev secret found in repository content.' >&2
+            exit 1
+          fi
+
+      - name: Verify integration documentation
+        run: |
+          test -s docs/PEFY_AGENTIC_DEV_FABRIC.md
+          grep -q '21st.dev' docs/PEFY_AGENTIC_DEV_FABRIC.md
+          grep -q 'API_KEY_21ST' docs/PEFY_AGENTIC_DEV_FABRIC.md
+          grep -q 'PEFY-TECH' docs/PEFY_ACCOUNT_AGENTIC_ALIGNMENT.md
+          grep -q 'PEFY-CYBER' docs/PEFY_ACCOUNT_AGENTIC_ALIGNMENT.md
