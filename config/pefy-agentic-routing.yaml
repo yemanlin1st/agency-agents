@@ -1,0 +1,169 @@
+version: "1.0"
+name: PEFY Agentic Routing Policy
+default_posture:
+  read_only_first: true
+  sandbox_first: true
+  pr_first: true
+  proof_first: true
+  minimal_agent_count: true
+  deterministic_tools_first: true
+
+architecture:
+  sovereign_orchestrator: PEA
+  operating_blueprint: "PEFY-GG Ω INTERCORE 360™"
+  intelligence_fabric: "MƐTAPEFYON Ω™"
+  legal_digital_name: "METAPEFYON OMEGA™"
+  capability_registry: "PEFY-GG OMNIA Skillspector DeepSmart MCP™"
+  execution_router: "PEFY Elite Execution Router"
+  engineering_router: "PEFY Agentic Dev Orchestrator"
+  execution_model: AAOS-X
+
+planes:
+  command:
+    owns: [intent, authority, priority, approval]
+  control:
+    owns: [policy, routing, identity, risk, budgets, rate_limits, model_selection]
+  execution:
+    owns: [agents, agencies, skills, tools, mcp, code, tests, deployments]
+  resilience:
+    owns: [audit, backup, replica, replay, synchronization, rollback, recovery]
+
+business_units:
+  owner: PEFY-TECH
+  assurance_extension: PEFY-CYBER
+  consumers:
+    - PEFY-MANAGEMENT
+    - PEFY-LANG
+    - PEFY-TRAINING
+    - PEFY-2COM
+    - PEFY-COLISEUM
+    - FYLAB
+    - Fondation Eulyson
+
+capabilities:
+  21st_dev:
+    class: external_ui_accelerator
+    authority: execution_only
+    allowed_for:
+      - react
+      - nextjs
+      - shadcn
+      - component_search
+      - component_generation
+      - theme_reuse
+      - ui_templates
+    preconditions:
+      - local_reuse_search
+      - approved_data_classification
+      - skill_intake_status
+    postconditions:
+      - license_review
+      - dependency_review
+      - accessibility_review
+      - security_review
+      - performance_review
+      - tests
+      - evidence
+    secret_env:
+      - API_KEY_21ST
+
+  branch_swarm:
+    name: OMNIA Branch-Swarm
+    use_when: independent_parallel_workstreams
+    isolation_required: true
+    conflicting_writes_parallel: false
+
+  skill_intake:
+    name: PEFY Skill Intake Auditor
+    required_for:
+      - new_agent
+      - new_skill
+      - new_mcp
+      - new_plugin
+      - new_framework
+      - new_external_service
+    outcomes:
+      - APPROVED
+      - APPROVED_WITH_RESTRICTIONS
+      - PILOT
+      - QUARANTINED
+      - REJECTED
+
+routing:
+  default:
+    primary_agents: 1
+    reviewers_after_implementation: true
+    swarm_for_narrow_tasks: false
+  ui:
+    primary: Frontend Developer
+    optional: [UI Designer, UX Architect, Brand Guardian, Section 508 Accessibility Specialist, Internationalization Engineer]
+    external_capability: 21st_dev
+  architecture:
+    primary: Software Architect
+    optional: [Backend Architect, API Platform Engineer]
+  ai_agentic:
+    primary: Multi-Agent Systems Architect
+    optional: [AI Engineer, Prompt Engineer, RAG Pipeline Engineer, Search Relevance Engineer]
+  security_identity:
+    primary: Identity & Access Engineer
+    optional: [Code Reviewer, Incident Response Commander, Network Engineer, SRE]
+    assurance: PEFY-CYBER
+  devops_platform:
+    primary: DevOps Automator
+    optional: [SRE, Developer Tooling Engineer, FinOps Engineer, Database Reliability Engineer]
+  data:
+    primary: Data Engineer
+    optional: [Database Optimizer, Database Reliability Engineer, RAG Pipeline Engineer]
+  quality:
+    primary: Code Reviewer
+    optional: [Minimal Change Engineer]
+
+memory:
+  raw_chat_is_canonical: false
+  layers:
+    - ephemeral_task_context
+    - mission_memory
+    - approved_durable_knowledge
+    - restricted_experiments
+  restricted:
+    - Claude-Mem
+  rules:
+    - no_secrets
+    - no_raw_credentials
+    - no_unnecessary_personal_data
+    - distill_before_handoff
+    - avoid_duplicate_context
+    - persist_only_when_needed
+
+approval_boundary:
+  owner_or_policy_approval_required_for:
+    - production_write
+    - production_delete
+    - outbound_send
+    - payment
+    - signature
+    - identity_account_wide_action
+    - irreversible_migration
+    - privileged_security_change
+  required_evidence:
+    - scope
+    - authority
+    - audit_log
+    - rollback_or_recovery
+    - verification
+
+completion_contract:
+  require_when_relevant:
+    - decision
+    - evidence
+    - owner
+    - risks
+    - verification
+    - rollback_or_recovery
+    - next_action
+  forbidden_unverified_claims:
+    - production_ready
+    - compliant
+    - secure
+    - complete
+    - tested
