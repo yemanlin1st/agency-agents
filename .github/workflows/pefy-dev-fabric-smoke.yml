@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git grep -nE 'API_KEY_21ST=["'"'][A-Za-z0-9_-]{12,}' -- . ':!docs/PEFY_AGENTIC_DEV_FABRIC.md'; then
+          if git grep -nE 'API_KEY_21ST[[:space:]]*=[[:space:]]*"?[A-Za-z0-9_-]{12,}' -- . ':!docs/PEFY_AGENTIC_DEV_FABRIC.md'; then
             echo 'Potential 21st.dev secret found in repository content.' >&2
             exit 1
           fi
