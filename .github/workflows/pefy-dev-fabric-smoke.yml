@@ -1,0 +1,56 @@
+name: PEFY Dev Fabric Smoke
+
+on:
+  pull_request:
+    paths:
+      - 'engineering/engineering-pefy-agentic-dev-orchestrator.md'
+      - 'scripts/install-pefy-dev-fabric.sh'
+      - 'docs/PEFY_AGENTIC_DEV_FABRIC.md'
+      - '.github/workflows/pefy-dev-fabric-smoke.yml'
+  push:
+    branches:
+      - 'pefy/21st-agentic-dev-fabric'
+    paths:
+      - 'engineering/engineering-pefy-agentic-dev-orchestrator.md'
+      - 'scripts/install-pefy-dev-fabric.sh'
+      - 'docs/PEFY_AGENTIC_DEV_FABRIC.md'
+      - '.github/workflows/pefy-dev-fabric-smoke.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate bootstrap shell syntax
+        run: bash -n scripts/install-pefy-dev-fabric.sh
+
+      - name: Validate required orchestrator frontmatter
+        shell: bash
+        run: |
+          set -euo pipefail
+          file='engineering/engineering-pefy-agentic-dev-orchestrator.md'
+          grep -q '^name: PEFY Agentic Dev Orchestrator$' "$file"
+          grep -q '^description:' "$file"
+          grep -q '^color:' "$file"
+          grep -q '^emoji:' "$file"
+          grep -q '^vibe:' "$file"
+
+      - name: Prevent committed 21st secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git grep -nE 'API_KEY_21ST=["'"'][A-Za-z0-9_-]{12,}' -- . ':!docs/PEFY_AGENTIC_DEV_FABRIC.md'; then
+            echo 'Potential 21st.dev secret found in repository content.' >&2
+            exit 1
+          fi
+
+      - name: Verify integration documentation
+        run: |
+          test -s docs/PEFY_AGENTIC_DEV_FABRIC.md
+          grep -q '21st.dev' docs/PEFY_AGENTIC_DEV_FABRIC.md
+          grep -q 'API_KEY_21ST' docs/PEFY_AGENTIC_DEV_FABRIC.md
